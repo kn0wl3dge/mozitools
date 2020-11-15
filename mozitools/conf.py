@@ -60,3 +60,8 @@ BOOTSTRAP_NODES = [
     ("130.239.18.159", 6881),
     ("87.98.162.88", 6881),
 ]
+
+ELK_HOSTS = "https://admin:admin@opendistro-opendistro-es-client-service.monitoring.svc.cluster.local:9200"
+ELK_SSL = True
+ELK_INDEX = "mozitools"
+ELK_BULK_SIZE = 100

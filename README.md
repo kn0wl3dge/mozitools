@@ -1,35 +1,31 @@
-#Introduction
+# Introduction
 
-##Features
+## Features
 * Repair the UPX p_info structure (p_filesize and p_blocksize are set to null
  to avoid unpacking)
 * Unpack the sample using UPX
 * Recover and decrypt the configuration of the sample
+* Fake a Mozi node and request config files
+* Find others Mozi nodes and import results in ElasticSearch
 
-##Usage
+## Usage
+```bash
+pip install -r requirements.txt
+python ./main.py -h
+```
 
-
-##Runnning requirements
+## Runnning requirements
 * UPX should be installed and available in the PATH
 
-##Dev requirements
+## Dev requirements
 ```bash
+pip install -r requirements.txt
 pip install -r dev-requirements.txt
 ```
 
-#How does it work ?
-##Unpacking the sample
-toto
-##Extracting configuration file
-
-#TODO
-- [x] Implement the unpacker component
-- [x] Implement the decoder component
-- [ ] Add a config signature check
-- [ ] Downloads samples using URLHaus
-- [ ] Extract config from every samples
-- [ ] Track the C2 / compromised host etc...
-
+# How does it work ?
+You can check out this [Blog Article](https://kn0wledge.fr) for more
+ information.
 
 #References
 * https://www.cyberdefensemagazine.com/mozi-botnet-is-responsible-for-most-of-the-iot-traffic/

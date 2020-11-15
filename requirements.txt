@@ -1,0 +1,2 @@
+bencodepy==0.9.5
+elasticsearch==7.9.1

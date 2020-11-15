@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mozitracker
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mozitracker
+  template:
+    metadata:
+      labels:
+        app: mozitracker
+    spec:
+      containers:
+      - name: mozitracker
+        image: knowl3dge/mozitools:latest
