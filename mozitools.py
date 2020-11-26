@@ -1,14 +1,24 @@
 import argparse
-import json
 import logging
-from sys import path
 
 from mozitools.decoder import MoziDecoder
 from mozitools.tracker import MoziTracker
 from mozitools.unpacker import MoziUnpacker
 
 
+HEADER = """
+                             __                   ___             
+ /'\_/`\                  __/\ \__               /\_ \            
+/\      \    ___   ____  /\_\ \ ,_\   ___     ___\//\ \     ____  
+\ \ \__\ \  / __`\/\_ ,`\\\\/\ \ \ \/  / __`\  / __`\\\\ \ \   /',__\ 
+ \ \ \_/\ \/\ \L\ \/_/  /_\ \ \ \ \_/\ \L\ \/\ \L\ \\\\_\ \_/\__, `\\
+  \ \_\\\\ \_\ \____/ /\____\\\\ \_\ \__\ \____/\ \____//\____\/\____/
+   \/_/ \/_/\/___/  \/____/ \/_/\/__/\/___/  \/___/ \/____/\/___/ 
+                                                                  
+"""
+
 def main():
+    print(HEADER)
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--decode', help="decode a mozi packed file and"
                                                " extract it's configuration",
@@ -20,8 +30,6 @@ def main():
     parser.add_argument("-f", "--file", help="sample file that should be "
                                              "unpacked / decoded",
                         type=str)
-    parser.add_argument("-o", "--output", help="output directory for the \
-            unpacked sample", type=str, default="")
     parser.add_argument("-j", "--json", help="dump the config in a json file",
                         action="store_true")
     parser.add_argument("-q", "--quiet", help="don't output any log",
@@ -37,7 +45,7 @@ def main():
         logger.disabled = True
 
     if args.decode and args.file != "":
-        logger.info("[+] Starting Decoder")
+        logger.info("[+] Starting the Unpacker")
         try:
             u = MoziUnpacker(args.file)
             output_file = u.unpack()
@@ -45,22 +53,23 @@ def main():
             logger.error("[-] Unpacker failed. Maybe the binary isn't packed.")
             output_file = args.file
         try:
-            logger.info("[+] Starting Unpacker")
+            logger.info("[+] Starting the Decoder")
             d = MoziDecoder(output_file)
             config = d.decode()
         except Exception as e:
             logger.error("[-] This doesn't seem to be a Mozi malware sample.")
             config = None
-        if config:
-            with open(path.dirname(args.file) + "/mozi-config.json") as fd:
-                fd.write(json.dumps(config))
-
-    if args.tracker:
+        if config and args.json:
+            with open(output_file + "-config.json", 'wb') as fd:
+                fd.write(config)
+    elif args.tracker:
         logger.info("[+] Starting Tracker")
-        s = MoziTracker(10000)
+        s = MoziTracker()
         s.start()
         s.find_nodes()
         s.join()
+    else:
+        parser.print_help()
 
 
 if __name__ == "__main__":

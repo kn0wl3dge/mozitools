@@ -26,8 +26,15 @@ pip install -r dev-requirements.txt
 # How does it work ?
 You can check out this [Blog Article](https://kn0wledge.fr) for more
  information.
+ 
+# Submit an issue
 
-#References
+Feel free to submit any issue you could encounter. I'll be happy to provide a
+ fix.  
+PLease, do not forget to add details related to your issue (command line
+, output, sample...).
+
+# References
 * https://www.cyberdefensemagazine.com/mozi-botnet-is-responsible-for-most-of-the-iot-traffic/
 * https://securityintelligence.com/posts/botnet-attack-mozi-mozied-into-town/
 * https://blog.netlab.360.com/mozi-another-botnet-using-dht/

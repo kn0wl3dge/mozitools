@@ -2,7 +2,9 @@ import json
 import logging
 import re
 
-from mozitools.conf import *
+from mozitools.conf import XOR_KEY, CONFIG_TOTAL_SIZE, CONFIG_SIZE, \
+    SIGNATURE1_SIZE, CONFIG_VERSION_SIZE, SIGNATURE2_SIZE, CONFIG_TAGS, \
+    CONFIG_HEADER
 
 
 class MoziConfigNotFoundError(Exception):
@@ -28,11 +30,11 @@ class MoziConfigDecoder:
 
     def extract_config(self):
         begin = 0
-        end = CONFIG_SIZE
+        end = CONFIG_TOTAL_SIZE
         try:
             self.config["raw_config"] = decrypt_config(self.data[begin:end])
-            begin = end
-            end += SIGNATURE1_SIZE
+            begin = CONFIG_SIZE
+            end = begin + SIGNATURE1_SIZE
             self.config["signature1"] = self.data[begin:end].hex()
             begin = end
             end += CONFIG_VERSION_SIZE
@@ -60,11 +62,14 @@ class MoziConfigDecoder:
             "config"]["count"] else False
         self.config["config"]["count"] = \
             self.config["config"]["count"].replace("[idp]", "")
+        self.config["raw_config"] = self.config["raw_config"][:CONFIG_SIZE]\
+            .rstrip('\x00')
         self.print_config()
 
     def print_config(self):
         for key, val in self.config.items():
-            self.logger.info(f"\t{key.upper()} : {val}")
+            if key != "raw_config":
+                self.logger.info(f"\t{key.upper()} : {val}")
 
     def decode(self):
         self.extract_config()
