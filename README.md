@@ -11,10 +11,11 @@
 ## Usage
 ```bash
 pip install -r requirements.txt
-python ./main.py -h
+python ./mozitools.py -h
 ```
 
-## Runnning requirements
+## Running requirements
+* This code is tested and maintained using python 3
 * UPX should be installed and available in the PATH
 
 ## Dev requirements

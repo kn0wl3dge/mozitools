@@ -16,6 +16,12 @@ class MoziConfigParsingError(Exception):
 
 
 def decrypt_config(data):
+    """
+    Decrypt the Mozi configuration using a simple XOR algorithm with an
+    hardcoded key stored in conf.py
+    :param data: config being decrypted
+    :return: decrypted config
+    """
     data = list(data)
     for i in range(len(data)):
         data[i] ^= XOR_KEY[i % len(XOR_KEY)]
@@ -23,12 +29,26 @@ def decrypt_config(data):
 
 
 class MoziConfigDecoder:
+    """
+        This class is used to decrypt and parse a Mozi configuration.
+        Example:
+            d = MoziConfigDecoder(my_config)
+            config = d.decode()
+    """
     def __init__(self, data):
+        """
+        Init a decoder object.
+        :param data: encrypted Mozi configuration
+        """
         self.logger = logging.getLogger("mozitools")
         self.config = {}
         self.data = data
 
     def extract_config(self):
+        """
+        Extract and store the different fields of a Mozi configuration such
+        as raw configurations, versions and signatures.
+        """
         begin = 0
         end = CONFIG_TOTAL_SIZE
         try:
@@ -51,6 +71,11 @@ class MoziConfigDecoder:
             raise MoziConfigParsingError
 
     def parse_config(self):
+        """
+        Parse the known configuration tags defined in conf.py. Basically, the
+        raw configuration looks like "[ss]Something[/ss][dip]Something[/dip]..."
+        :return:
+        """
         self.logger.info("[+] Parsing the configuration...")
 
         for tag, desc in CONFIG_TAGS.items():
@@ -67,11 +92,21 @@ class MoziConfigDecoder:
         self.print_config()
 
     def print_config(self):
+        """
+        Print the different tags extracted during the parsing step.
+        """
         for key, val in self.config.items():
             if key != "raw_config":
                 self.logger.info(f"\t{key.upper()} : {val}")
+        self.logger.info("\n=======>")
+        for key, val in self.config["config"].items():
+            self.logger.info(f'\t[{key}] ({CONFIG_TAGS[key]}) : {val}')
 
     def decode(self):
+        """
+        Extract, decrypt and parse the configuration stored in the object.
+        :return: final configuration as a dictionary
+        """
         self.extract_config()
         self.parse_config()
         return self.config
@@ -81,23 +116,31 @@ class MoziDecoder:
     """
     This class is used to decode Mozi v2 sample
     Example:
-        d = MoziDecoder(unpacked_filename)
+        d = MoziDecoder(unpacked_mozi_filename)
         decoded_config = d.decode()
     """
     def __init__(self, filename):
+        """
+        Init a decoder object.
+        :param filename: unpacked Mozi sample
+        """
         self.logger = logging.getLogger("mozitools")
         self.filename = filename
         self.data = None
         self.config = {}
 
     def read_file(self):
+        """
+        Read the sample and stores it in the object.
+        """
         with open(self.filename, 'rb') as fd:
             self.data = fd.read()
 
-    def check_signature(self):
-        raise NotImplementedError
-
     def extract_config(self):
+        """
+        Find and extract the static configuration hardcoded in the sample.
+        :return: decrypted and parsed configuration
+        """
         config_index = self.data.index(CONFIG_HEADER)
         if config_index == -1:
             raise MoziConfigNotFoundError
@@ -106,12 +149,14 @@ class MoziDecoder:
         return MoziConfigDecoder(raw_cfg).decode()
 
     def decode(self):
+        """
+        Extract, decrypt and parse the configuration stored in the object.
+        :return: utf-8 string representing the final configuration
+        """
         self.logger.info(f"[+] Reading the file ({self.filename})")
         self.read_file()
         self.logger.info(f"[+] Extracting the configuration...")
         self.config = self.extract_config()
-        self.logger.info("[+] Done. Final result :")
-        for key, val in self.config["config"].items():
-            self.logger.info(f'\t[{key}] ({CONFIG_TAGS[key]}) : {val}')
+        self.logger.info("[+] Done.")
 
         return json.dumps(self.config).encode('utf-8')

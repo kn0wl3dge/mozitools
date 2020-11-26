@@ -67,4 +67,5 @@ ELK_SSL = True
 ELK_INDEX = "mozitools"
 ELK_BULK_SIZE = 100
 
+# Number of node to remember. Nodes in cache aren't queried.
 NODES_CACHE_SIZE = 10000

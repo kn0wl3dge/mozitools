@@ -18,36 +18,43 @@ HEADER = """
 """
 
 def main():
-    print(HEADER)
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--decode', help="decode a mozi packed file and"
                                                " extract it's configuration",
                         action="store_true")
-    parser.add_argument('-t', '--tracker', help="fake a mozi node to search "
+    parser.add_argument('-t', '--tracker', help="fake mozi node to identify "
                                                 "mozi node and configurations",
                         action="store_true")
 
     parser.add_argument("-f", "--file", help="sample file that should be "
                                              "unpacked / decoded",
                         type=str)
+    parser.add_argument("-o", "--output", help="output directory if different "
+                                             "from the sample",
+                        type=str)
     parser.add_argument("-j", "--json", help="dump the config in a json file",
                         action="store_true")
     parser.add_argument("-q", "--quiet", help="don't output any log",
                         action="store_true")
-    args = parser.parse_args()
 
     logger = logging.getLogger("mozitools")
     logger.setLevel(logging.INFO)
     stream_handler = logging.StreamHandler()
     logger.addHandler(stream_handler)
 
+    logger.info(HEADER)
+
+    args = parser.parse_args()
     if args.quiet:
         logger.disabled = True
 
     if args.decode and args.file != "":
         logger.info("[+] Starting the Unpacker")
         try:
-            u = MoziUnpacker(args.file)
+            if args.output:
+                u = MoziUnpacker(args.file, args.output)
+            else:
+                u = MoziUnpacker(args.file)
             output_file = u.unpack()
         except Exception as e:
             logger.error("[-] Unpacker failed. Maybe the binary isn't packed.")
