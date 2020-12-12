@@ -1,4 +1,4 @@
-# Introduction
+# Mozitools
 
 ## Features
 * Repair the UPX p_info structure (p_filesize and p_blocksize are set to null
@@ -24,15 +24,15 @@ pip install -r requirements.txt
 pip install -r dev-requirements.txt
 ```
 
-# How does it work ?
-You can check out this [Blog Article](https://kn0wledge.fr) for more
+# How does it work?
+You can check out this [Blog Article](https://kn0wledge.fr/projects/mozitools) for more
  information.
- 
+  
 # Submit an issue
 
 Feel free to submit any issue you could encounter. I'll be happy to provide a
  fix.  
-PLease, do not forget to add details related to your issue (command line
+Please, do not forget to add details related to your issue (command line
 , output, sample...).
 
 # References

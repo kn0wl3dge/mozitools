@@ -10,7 +10,7 @@ from secrets import token_bytes
 from elasticsearch import Elasticsearch, helpers
 
 from mozitools.conf import ELK_HOSTS, ELK_INDEX, ELK_SSL, \
-    ELK_BULK_SIZE, NODES_CACHE_SIZE, CONFIG_SIZE, BOOTSTRAP_NODES
+    ELK_BULK_SIZE, NODES_CACHE_SIZE, BOOTSTRAP_NODES
 from mozitools.decoder import MoziConfigDecoder
 
 
