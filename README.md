@@ -101,6 +101,9 @@ To test Mozitools :
 podman run -v $PWD:/app/data mozitools unp -i data/Mozi.m -o data/Mozi
 ```
 
+### Elasticsearch and Kibana stack
+To deploy the stack a docker-compose is available.
+
 # How does it work?
 You can check out this [Blog Article](https://kn0wledge.fr/projects/mozitools) for more
 information.
