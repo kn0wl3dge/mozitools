@@ -6,15 +6,16 @@ import (
 	"crypto/tls"
 	"encoding/hex"
 	"encoding/json"
-	"github.com/elastic/go-elasticsearch/v8"
-	"github.com/elastic/go-elasticsearch/v8/esutil"
-	"github.com/kn0wl3dge/mozitools/pkg/decode/config"
 	"log"
 	"net"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/elastic/go-elasticsearch/v8"
+	"github.com/elastic/go-elasticsearch/v8/esutil"
+	"github.com/kn0wl3dge/mozitools/pkg/decode/config"
 )
 
 type Mozi struct {
@@ -72,6 +73,12 @@ func NewELKClient(elkConfig ELKConfig) *ELKClient {
 		log.Printf("Could not create a new elasticsearch client: %s\n", err)
 		return nil
 	}
+	_, err = es.Info()
+	if err != nil {
+		log.Printf("Error getting response: %s", err)
+		return nil
+	}
+
 	bi, err := esutil.NewBulkIndexer(esutil.BulkIndexerConfig{
 		Index:         elkConfig.Index,  // The default index name
 		Client:        es,               // The Elasticsearch client
