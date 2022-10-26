@@ -86,6 +86,21 @@ $ ./mozitools track --index mozi-test --url https://127.0.0.1:9200 --user elasti
 ^C
 ```
 
+## Try it
+
+A container file is available to try out Mozitools !
+
+To create the image : 
+```
+podman build -t mozitools -f Containerfile
+```
+
+To test Mozitools :
+
+```
+podman run -v $PWD:/app/data mozitools unp -i data/Mozi.m -o data/Mozi
+```
+
 # How does it work?
 You can check out this [Blog Article](https://kn0wledge.fr/projects/mozitools) for more
 information.
