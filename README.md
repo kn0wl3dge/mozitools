@@ -88,21 +88,31 @@ $ ./mozitools track --index mozi-test --url https://127.0.0.1:9200 --user elasti
 
 ## Try it
 
-A container file is available to try out Mozitools !
+If you have UPX installed on your machine, you can download and try the latest release on the [release page](https://github.com/kn0wl3dge/mozitools/releases).
+The binaries are self sufficient.
 
-To create the image : 
+However, if you want to run this tool in a more isolated way you can use the provided Container file.
+
+Execute the following command to create the image :
 ```
 podman build -t mozitools -f Containerfile
 ```
 
-To test Mozitools :
+You are now able to run Mozitools from the previously built image:
 
 ```
 podman run -v $PWD:/app/data mozitools unp -i data/Mozi.m -o data/Mozi
 ```
 
 ### Elasticsearch and Kibana stack
-To deploy the stack a docker-compose is available.
+To deploy the stack a docker-compose is available if you're looking to try the Mozi tracker. Please be aware that it is not intended and clearly unsafe for production usage.
+
+```
+docker-compose up -d
+```
+
+*Note: Do not forget to build the image for docker !*
+
 
 # How does it work?
 You can check out this [Blog Article](https://kn0wledge.fr/projects/mozitools) for more
