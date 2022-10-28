@@ -9,7 +9,6 @@ import (
 	"log"
 	"net"
 	"net/http"
-	"strconv"
 	"strings"
 	"time"
 
@@ -25,7 +24,7 @@ type Mozi struct {
 }
 
 type ELKMozi struct {
-	Time   string        `json:"timestamp"`
+	Time   string        `json:"@timestamp"`
 	Config ELKMoziConfig `json:"config"`
 	Node   ELKMoziNode   `json:"node"`
 }
@@ -75,7 +74,7 @@ func NewELKClient(elkConfig ELKConfig) *ELKClient {
 	}
 	_, err = es.Info()
 	if err != nil {
-		log.Printf("Error getting response: %s", err)
+		log.Printf("Error getting response: %s\n", err)
 		return nil
 	}
 
@@ -100,7 +99,7 @@ func NewELKClient(elkConfig ELKConfig) *ELKClient {
 
 func createELKMoziDocument(input *Mozi) []byte {
 	data := ELKMozi{
-		Time: strconv.FormatInt(time.Now().Unix(), 10),
+		Time: time.Now().UTC().Format("2006-01-02T15:04:05.123Z"),
 		Config: ELKMoziConfig{
 			Raw:        strings.Trim(string(input.cnf.Rawdata[:]), "\x00"),
 			Version:    input.cnf.Version,
