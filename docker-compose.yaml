@@ -10,8 +10,10 @@ services:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
       ELASTIC_PASSWORD: elastic
       discovery.type: single-node
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
     healthcheck:
-        test: ["CMD", "curl", "-f", "http://127.0.0.1:9200/_cluster/health?wait_for_status=green"]
+        test: ["CMD", "curl", "-f", "http://elasticsearch:9200/_cluster/health?wait_for_status=green"]
         # Otherwise elasticsearch cannot dl the geoip map because mozi take all the bandwidth
         interval: 50s
         timeout: 30s
@@ -33,6 +35,9 @@ services:
 
   mozitools:
     image: mozitools
+    build:
+      context: .
+      dockerfile: Containerfile
     container_name: mozitools
     command: ["track", "--index", "mozi-test", "--url" , "http://elasticsearch:9200", "--user", "elastic", "--pass", "elastic"]
     depends_on:
@@ -40,6 +45,10 @@ services:
         condition: service_healthy
     networks:
       - elk
+
+volumes:
+  elasticsearch-data:
+    driver: local
 
 networks:
   elk:

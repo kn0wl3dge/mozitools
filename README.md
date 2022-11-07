@@ -111,9 +111,6 @@ To deploy the stack a docker-compose is available if you're looking to try the M
 docker-compose up -d
 ```
 
-*Note: Do not forget to build the image for docker !*
-
-
 # How does it work?
 You can check out this [Blog Article](https://kn0wledge.fr/projects/mozitools) for more
 information.
